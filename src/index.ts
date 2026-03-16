@@ -49,3 +49,25 @@ export {
 export { Switch, type SwitchProps } from "./components/switch"
 export { Checkbox, type CheckboxProps } from "./components/checkbox"
 export { Toaster, toast, type ToasterProps } from "./components/toast"
+
+// Layout & data components
+export {
+  Table, TableWrap, TableHeader, TableBody, TableFooter,
+  TableRow, TableHead, TableCell, TableEmpty,
+  type TableProps, type TableWrapProps, type TableRowProps,
+  type TableHeadProps, type TableCellProps,
+} from "./components/table"
+export {
+  Sidebar, SidebarHeader, SidebarLogo, SidebarTitle, SidebarCollapse,
+  SidebarNav, SidebarItem, SidebarIcon, SidebarLabel,
+  SidebarGroup, SidebarGroupLabel, SidebarNested, SidebarDivider,
+  SidebarFooter, SidebarAvatar, SidebarUser, SidebarUserName, SidebarUserRole,
+  type SidebarProps, type SidebarItemProps,
+} from "./components/sidebar"
+export { Skeleton, SkeletonGroup, type SkeletonProps, type SkeletonGroupProps } from "./components/skeleton"
+export {
+  Sheet, SheetTrigger, SheetClose, SheetContent,
+  SheetHeader, SheetTitle, SheetDescription, SheetBody, SheetFooter,
+  type SheetContentProps,
+} from "./components/sheet"
+export { ScrollArea, type ScrollAreaProps } from "./components/scroll-area"
