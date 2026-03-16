@@ -397,10 +397,12 @@
 .modal[data-state] {
   position: fixed;
   z-index: 500;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  inset: 0;
+  margin: auto;
+  height: fit-content;
+  max-height: 85dvh;
 }
+
 
 /* Override the catalog's dialog:not([open]) rule — Radix doesn't use [open] attribute */
 .modal:not([open]) {

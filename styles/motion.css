@@ -33,13 +33,15 @@
 
 /* Overlay — fade with backdrop blur */
 [role="dialog"] ~ [data-state="open"]:not([role]),
-[data-state="open"][data-aria-hidden="true"] {
-  animation: cat-fade 300ms var(--ease-out) both !important;
+[data-state="open"][data-aria-hidden="true"],
+.modal-overlay[data-state="open"] {
+  animation: cat-fade 250ms var(--ease-out) both !important;
   backdrop-filter: blur(2px);
 }
 [role="dialog"] ~ [data-state="closed"]:not([role]),
-[data-state="closed"][data-aria-hidden="true"] {
-  animation: cat-fade-out 200ms var(--ease) both !important;
+[data-state="closed"][data-aria-hidden="true"],
+.modal-overlay[data-state="closed"] {
+  animation: cat-fade-out 150ms var(--ease) both !important;
 }
 
 /*
