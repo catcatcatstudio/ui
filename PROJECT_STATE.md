@@ -23,32 +23,33 @@ Key file: `~/catcatcat/ui/styles/radix-compat.css` — bridges catalog class sel
 
 ```
 status: active
-iteration: 2
+iteration: 3
 interval: 10m
 cron_id: a9d686fa
 checkpoint_interval: 10
 verification_baseline: pnpm build passes (23.28 KB ESM, 14.10 KB DTS)
 project_goals: Fix all 20 components to match catalog spec via browser verification, then Stage 8 (integration test in fresh project), then Stage 9 (prep for npm publish)
-current_focus: Stage 9 — prep for npm publish
-last_action: Stage 8 COMPLETE. Created fresh Next.js project at ~/catcatcat/ui-integration-test/. All 20 components import and render correctly from @catcatcat/ui. Known issue: pnpm file: symlinks break Turbopack — workaround is copying dist directly to node_modules. This won't affect npm installs.
+current_focus: Stage 9b — create GitHub repo and push
+last_action: Stage 9a COMPLETE. Package prepped: README.md, sideEffects for CSS, keywords, license MIT, repository field. Pack is 11 files / 64 KB. Build passes.
 failure_log: []
 blocked: [Stage 9 npm publish — needs user credentials/login]
 ```
 
 ### Up Next
-1. [GREEN] Stage 9a: Prep package for publish — verify package.json exports, README, .npmignore
-2. [GREEN] Stage 9b: Create GitHub repo catcatcatstudio/ui, push code
-3. [RED] Stage 9c: npm publish — needs user npm login/credentials
+1. [GREEN] Stage 9b: Create GitHub repo catcatcatstudio/ui, push code
+2. [RED] Stage 9c: npm publish — needs user npm login/credentials
 
 ### Completed
 - [0] Created radix-compat.css, fixed switch/popover/dropdown/accordion/tabs/toast. Browser-verified 8+ components passing.
 - [1] Browser-verified select, dialog, tooltip, checkbox. All 20 components passing.
-- [2] Stage 8: Integration test — fresh Next.js project, all 20 components render. Turbopack symlink workaround: copy dist directly.
+- [2] Stage 8: Integration test — fresh Next.js project, all 20 components render.
+- [3] Stage 9a: Package prep — README, sideEffects, license, keywords, repository. 11 files / 64 KB.
 
 ### Momentum
 - iter-0: GREEN (radix-compat.css systemic fix + 8 components verified)
 - iter-1: GREEN (remaining 4 components verified — all 20 passing)
 - iter-2: GREEN (Stage 8 integration test passes)
+- iter-3: GREEN (Stage 9a package prep)
 
 ### Working Memory
 - **radix-compat.css** is the bridge layer. Catalog CSS uses .open/.active/.visible classes; Radix uses [data-state]. The compat file overrides conflicting properties (opacity:0, position:absolute, ::before/::after arrows) and adds data-state selectors.

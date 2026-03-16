@@ -14,11 +14,21 @@
     "./styles/index.css": "./styles/index.css",
     "./styles/*.css": "./styles/*.css"
   },
+  "sideEffects": [
+    "**/*.css"
+  ],
   "files": [
     "dist",
     "styles",
-    "styles.css"
+    "styles.css",
+    "README.md"
   ],
+  "keywords": ["react", "components", "design-system", "cat-1a", "radix-ui", "catcatcat"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/catcatcatstudio/ui"
+  },
   "scripts": {
     "build": "tsup && node -e \"const fs=require('fs');const f='dist/index.js';fs.writeFileSync(f,'\\\"use client\\\";\\n'+fs.readFileSync(f,'utf8'))\"",
     "dev": "tsup --watch",
