@@ -130,12 +130,39 @@
   transform: rotate(180deg);
 }
 
+/* ============================================
+   GLOBAL: Kill all browser default focus outlines.
+   cat-1a uses its own focus indicators (border-color changes,
+   subtle highlights) — never the browser's hard black outline.
+   ============================================ */
+*:focus {
+  outline: none !important;
+}
+
+*:focus-visible {
+  outline: none !important;
+}
+
+/* Kill active scale on full-width elements (accordion headers, etc.) */
+.accordion-header:active {
+  transform: none !important;
+}
+
 /* Override catalog grid animation — Radix manages content visibility
-   and motion.css provides height animation via --radix-accordion-content-height */
+   and motion.css provides height animation via --radix-accordion-content-height.
+   The [role="region"] child gets the height animation — it needs overflow:hidden
+   but must maintain full width to prevent content shrinking during animation. */
 .accordion-panel {
   display: block !important;
   grid-template-rows: none !important;
+}
+
+/* The Radix-inserted [role="region"] gets the height animation from motion.css.
+   Ensure it doesn't shrink width during the height transition. */
+.accordion-panel [role="region"],
+.accordion-item [role="region"] {
   overflow: hidden;
+  width: 100%;
 }
 
 
