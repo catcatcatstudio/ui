@@ -130,17 +130,12 @@
   transform: rotate(180deg);
 }
 
-/* ============================================
-   GLOBAL: Kill all browser default focus outlines.
-   cat-1a uses its own focus indicators (border-color changes,
-   subtle highlights) — never the browser's hard black outline.
-   ============================================ */
-*:focus {
-  outline: none !important;
+/* Soften outline button border — var(--text) is too harsh, use --border for subtle */
+.btn.outline {
+  border-color: var(--border) !important;
 }
-
-*:focus-visible {
-  outline: none !important;
+.btn.outline:hover {
+  border-color: var(--text-dim) !important;
 }
 
 /* Kill active scale on full-width elements (accordion headers, etc.) */
@@ -258,11 +253,6 @@
   transform: scale(1);
 }
 
-/* Focus state via Radix */
-.checkbox-box:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-}
 
 
 /* ============================================
@@ -317,11 +307,6 @@
   border-color: var(--text-dim);
 }
 
-/* Focus */
-.toggle-track[role="switch"]:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-}
 
 /* Pill variant — round track and knob */
 .toggle-track[role="switch"].pill {
@@ -570,4 +555,21 @@
 [data-sonner-toast] [data-button]:hover {
   border-color: var(--text-dim) !important;
   background: var(--tint) !important;
+}
+
+
+/* ============================================
+   GLOBAL: Kill ALL focus outlines. MUST BE LAST.
+   cat-1a never uses browser/CSS outline rings.
+   This goes at the end to win source-order ties
+   against any earlier rules with !important.
+   ============================================ */
+*:focus,
+*:focus-visible,
+*:focus-within,
+*::before:focus,
+*::after:focus {
+  outline: none !important;
+  outline-width: 0 !important;
+  outline-style: none !important;
 }
