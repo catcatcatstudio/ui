@@ -3,3 +3,6 @@ dist/
 .next/
 *.tsbuildinfo
 _notebook/
+PROJECT_STATE.md
+test-app/
+build_plan/
