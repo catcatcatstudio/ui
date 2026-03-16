@@ -1,0 +1,559 @@
+/*
+ * cat-1a-components.css
+ * Motion & behavior overrides for shadcn/Radix components.
+ * Replaces tw-animate-css defaults with cat-1a motion personality.
+ *
+ * Import in globals.css AFTER cat-1a.css:
+ *
+ *   @import "tailwindcss";
+ *   @import "tw-animate-css";
+ *   @import "shadcn/tailwind.css";
+ *   @import "./cat-1a.css";
+ *   @import "./cat-1a-components.css";
+ *   @custom-variant dark (&:is(.dark *));
+ *
+ * Targets Radix UI data attributes — no class name coupling.
+ * Uses !important on animation to override tw-animate-css utilities
+ * that shadcn components apply via Tailwind classes.
+ */
+
+
+/* ============================================
+   DIALOG / ALERT DIALOG
+   Signature blur + scale entrance.
+   ============================================ */
+
+/* Content — blur materialize in, blur scale out */
+[role="dialog"][data-state="open"] {
+  animation: cat-scale-in 250ms var(--ease-out) both !important;
+}
+[role="dialog"][data-state="closed"] {
+  animation: cat-scale-out 150ms var(--ease) both !important;
+}
+
+/* Overlay — fade with backdrop blur */
+[role="dialog"] ~ [data-state="open"]:not([role]),
+[data-state="open"][data-aria-hidden="true"] {
+  animation: cat-fade 300ms var(--ease-out) both !important;
+  backdrop-filter: blur(2px);
+}
+[role="dialog"] ~ [data-state="closed"]:not([role]),
+[data-state="closed"][data-aria-hidden="true"] {
+  animation: cat-fade-out 200ms var(--ease) both !important;
+}
+
+/*
+ * shadcn DialogOverlay typically has a class pattern.
+ * Target the overlay more reliably via adjacent positioning.
+ * If your overlay uses a specific class, add it here.
+ */
+
+
+/* ============================================
+   SHEET (Dialog variant — slides from edge)
+   Directional blur entrance.
+   ============================================ */
+
+/* Sheet slides from side — override with blur + directional slide.
+   shadcn Sheet uses data-state on SheetContent.
+   Side detection: shadcn adds side-specific classes (top/bottom/left/right).
+   We use custom keyframes per direction. */
+
+@keyframes cat-sheet-in-right {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateX(0);
+  }
+}
+@keyframes cat-sheet-out-right {
+  from {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translateX(100%);
+  }
+}
+@keyframes cat-sheet-in-left {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translateX(-100%);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateX(0);
+  }
+}
+@keyframes cat-sheet-out-left {
+  to {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translateX(-100%);
+  }
+}
+@keyframes cat-sheet-in-top {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+@keyframes cat-sheet-out-top {
+  to {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translateY(-100%);
+  }
+}
+@keyframes cat-sheet-in-bottom {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+@keyframes cat-sheet-out-bottom {
+  to {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translateY(100%);
+  }
+}
+
+/* Apply via shadcn's side classes on SheetContent.
+   shadcn uses: inset-x-0 top-0 (top), inset-x-0 bottom-0 (bottom),
+   inset-y-0 left-0 (left), inset-y-0 right-0 (right).
+   Target the data-state + positional combo. */
+[data-state="open"].inset-y-0.right-0 {
+  animation: cat-sheet-in-right 350ms var(--ease-out) both !important;
+}
+[data-state="closed"].inset-y-0.right-0 {
+  animation: cat-sheet-out-right 250ms var(--ease) both !important;
+}
+[data-state="open"].inset-y-0.left-0 {
+  animation: cat-sheet-in-left 350ms var(--ease-out) both !important;
+}
+[data-state="closed"].inset-y-0.left-0 {
+  animation: cat-sheet-out-left 250ms var(--ease) both !important;
+}
+[data-state="open"].inset-x-0.top-0 {
+  animation: cat-sheet-in-top 350ms var(--ease-out) both !important;
+}
+[data-state="closed"].inset-x-0.top-0 {
+  animation: cat-sheet-out-top 250ms var(--ease) both !important;
+}
+[data-state="open"].inset-x-0.bottom-0 {
+  animation: cat-sheet-in-bottom 350ms var(--ease-out) both !important;
+}
+[data-state="closed"].inset-x-0.bottom-0 {
+  animation: cat-sheet-out-bottom 250ms var(--ease) both !important;
+}
+
+
+/* ============================================
+   POPOVER
+   Blur entrance from anchor direction.
+   ============================================ */
+
+[data-side][data-state="open"] {
+  animation: cat-blur-resolve 200ms var(--ease-out) both !important;
+}
+[data-side][data-state="closed"] {
+  animation: cat-fade-out 150ms var(--ease) both !important;
+}
+
+/* Directional nudge based on which side the popover opens from */
+[data-side="bottom"][data-state="open"] {
+  animation: cat-popover-from-top 200ms var(--ease-out) both !important;
+}
+[data-side="top"][data-state="open"] {
+  animation: cat-popover-from-bottom 200ms var(--ease-out) both !important;
+}
+[data-side="left"][data-state="open"] {
+  animation: cat-popover-from-right 200ms var(--ease-out) both !important;
+}
+[data-side="right"][data-state="open"] {
+  animation: cat-popover-from-left 200ms var(--ease-out) both !important;
+}
+
+@keyframes cat-popover-from-top {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+@keyframes cat-popover-from-bottom {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+@keyframes cat-popover-from-left {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translateX(-4px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateX(0);
+  }
+}
+@keyframes cat-popover-from-right {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translateX(4px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateX(0);
+  }
+}
+
+/* This targets: Popover, HoverCard, Tooltip, DropdownMenu, ContextMenu,
+   Select, NavigationMenu — anything Radix renders with data-side.
+   All get blur entrance + directional nudge from anchor. */
+
+
+/* ============================================
+   DROPDOWN MENU / CONTEXT MENU
+   Already covered by [data-side] rules above.
+   Items get tint hover (matching catalog pattern).
+   ============================================ */
+
+[data-highlighted] {
+  background: var(--tint) !important;
+  transition: background var(--duration-fast) var(--ease);
+}
+
+/* Danger items */
+[data-highlighted][class*="destructive"],
+[data-highlighted][class*="danger"] {
+  background: var(--feedback-error-bg) !important;
+}
+
+
+/* ============================================
+   ACCORDION
+   Grid height animation with cat-1a easing.
+   Chevron rotation.
+   ============================================ */
+
+/* Panel expand/collapse — override default transition timing */
+[data-state="open"][data-orientation] > [role="region"],
+[data-state="open"] > [data-radix-collapsible-content] {
+  animation: cat-accordion-open 250ms var(--ease) both !important;
+}
+[data-state="closed"][data-orientation] > [role="region"],
+[data-state="closed"] > [data-radix-collapsible-content] {
+  animation: cat-accordion-close 200ms var(--ease) both !important;
+}
+
+@keyframes cat-accordion-open {
+  from {
+    height: 0;
+    opacity: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+    opacity: 1;
+  }
+}
+@keyframes cat-accordion-close {
+  from {
+    height: var(--radix-accordion-content-height);
+    opacity: 1;
+  }
+  to {
+    height: 0;
+    opacity: 0;
+  }
+}
+
+/* Chevron rotation on accordion triggers */
+[data-state="open"] > button > [data-accordion-icon],
+[data-state="open"] > button > svg.lucide-chevron-down,
+[data-state="open"] > button > svg[class*="chevron"],
+[data-state="open"] [data-slot="accordion-icon"] {
+  transform: rotate(180deg);
+  transition: transform var(--duration-fast) var(--ease);
+}
+[data-state="closed"] > button > [data-accordion-icon],
+[data-state="closed"] > button > svg.lucide-chevron-down,
+[data-state="closed"] > button > svg[class*="chevron"],
+[data-state="closed"] [data-slot="accordion-icon"] {
+  transform: rotate(0deg);
+  transition: transform var(--duration-fast) var(--ease);
+}
+
+
+/* ============================================
+   COLLAPSIBLE
+   Same height animation as accordion.
+   ============================================ */
+
+[data-state="open"] > [data-radix-collapsible-content] {
+  animation: cat-collapsible-open 250ms var(--ease) both !important;
+}
+[data-state="closed"] > [data-radix-collapsible-content] {
+  animation: cat-collapsible-close 200ms var(--ease) both !important;
+}
+
+@keyframes cat-collapsible-open {
+  from {
+    height: 0;
+    opacity: 0;
+  }
+  to {
+    height: var(--radix-collapsible-content-height);
+    opacity: 1;
+  }
+}
+@keyframes cat-collapsible-close {
+  from {
+    height: var(--radix-collapsible-content-height);
+    opacity: 1;
+  }
+  to {
+    height: 0;
+    opacity: 0;
+  }
+}
+
+
+/* ============================================
+   TABS
+   Panel crossfade. Active indicator transition.
+   ============================================ */
+
+/* Tab trigger — smooth color transition */
+[role="tab"] {
+  transition: color var(--duration-fast) var(--ease),
+              background var(--duration-fast) var(--ease),
+              box-shadow var(--duration-fast) var(--ease);
+}
+
+/* Active trigger underline — scaleX entrance */
+[role="tab"][data-state="active"]::after {
+  transition: transform var(--duration-fast) var(--ease);
+}
+
+
+/* ============================================
+   TOAST (Sonner)
+   Sonner manages its own animations via inline styles.
+   Override with CSS where possible.
+   ============================================ */
+
+/* Sonner toast container — entrance */
+[data-sonner-toast] {
+  --initial-height: 0;
+  filter: blur(0);
+  transition: filter 200ms var(--ease-out),
+              opacity 200ms var(--ease-out),
+              transform 200ms var(--ease-out) !important;
+}
+[data-sonner-toast][data-mounted="true"] {
+  filter: blur(0);
+}
+/* Give new toasts a blur entrance */
+[data-sonner-toast][data-mounted="false"] {
+  filter: blur(4px);
+}
+
+
+/* ============================================
+   COMMAND PALETTE (cmdk)
+   Blur + scale entrance (like catalog cmd-palette).
+   ============================================ */
+
+/* cmdk dialog container — handled by Dialog rules above via role="dialog" */
+
+/* cmdk items — tint hover */
+[cmdk-item] {
+  transition: background var(--duration-fast) var(--ease);
+}
+[cmdk-item][data-selected="true"],
+[cmdk-item][aria-selected="true"] {
+  background: var(--tint);
+}
+
+/* cmdk group heading */
+[cmdk-group-heading] {
+  text-transform: var(--text-transform, uppercase);
+  letter-spacing: 0.06em;
+}
+
+
+/* ============================================
+   SELECT
+   Dropdown-style entrance — covered by [data-side]
+   rules. Items get highlight treatment.
+   ============================================ */
+
+/* Select items use data-highlighted like dropdown */
+[role="option"][data-highlighted] {
+  background: var(--tint) !important;
+}
+
+
+/* ============================================
+   SWITCH / TOGGLE
+   Instant color switch + spring thumb slide.
+   ============================================ */
+
+/* Switch track — instant color, no transition on background */
+[role="switch"] {
+  transition: none;
+}
+/* Switch thumb — spring slide */
+[role="switch"] > span,
+[role="switch"] [data-slot="switch-thumb"] {
+  transition: transform 200ms var(--ease-spring) !important;
+}
+
+/* Toggle pressed state */
+[data-state="on"][role="button"],
+[aria-pressed="true"] {
+  transition: background var(--duration-fast) var(--ease),
+              color var(--duration-fast) var(--ease);
+}
+
+
+/* ============================================
+   NAVIGATION MENU
+   Directional crossfade based on data-motion.
+   ============================================ */
+
+[data-motion="from-start"] {
+  animation: cat-slide-in-right 200ms var(--ease-out) both !important;
+}
+[data-motion="from-end"] {
+  animation: cat-nav-slide-in-left 200ms var(--ease-out) both !important;
+}
+[data-motion="to-start"] {
+  animation: cat-nav-slide-out-left 150ms var(--ease) both !important;
+}
+[data-motion="to-end"] {
+  animation: cat-fade-out 150ms var(--ease) both !important;
+}
+
+@keyframes cat-nav-slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes cat-nav-slide-out-left {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+}
+
+
+/* ============================================
+   SCROLLBAR (applied to scroll areas)
+   Match cat-1a thin scrollbar pattern.
+   ============================================ */
+
+[data-radix-scroll-area-viewport] {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+[data-radix-scroll-area-viewport]::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+[data-radix-scroll-area-viewport]::-webkit-scrollbar-track {
+  background: transparent;
+}
+[data-radix-scroll-area-viewport]::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+[data-radix-scroll-area-viewport]::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}
+
+/* Radix ScrollArea scrollbar — fade behavior */
+[data-orientation][data-state="visible"] {
+  /* Only apply to scrollbar-specific data-state, not all data-state="visible" */
+}
+
+
+/* ============================================
+   GLOBAL INTERACTION PATTERNS
+   These apply cat-1a behavior across components.
+   ============================================ */
+
+/* Disabled state — consistent across all components */
+[data-disabled] {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* Button active state — micro press */
+button:active:not(:disabled):not([data-disabled]),
+[role="button"]:active:not(:disabled):not([data-disabled]) {
+  transform: scale(0.98);
+  transition: transform 100ms var(--ease);
+}
+
+/* Reduced motion — respect user preference */
+@media (prefers-reduced-motion: reduce) {
+  [data-state="open"],
+  [data-state="closed"],
+  [data-side],
+  [data-motion],
+  [role="dialog"],
+  [cmdk-item],
+  [data-sonner-toast] {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
