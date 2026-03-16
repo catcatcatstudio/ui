@@ -32,7 +32,6 @@ export const PopoverContent = forwardRef<HTMLDivElement, RadixPopover.PopoverCon
         {...props}
       >
         {children}
-        <RadixPopover.Arrow className="popover-radix-arrow" />
       </RadixPopover.Content>
     </RadixPopover.Portal>
   )

@@ -24,6 +24,7 @@ export default function RootLayout({
       <head>
         <link rel="stylesheet" href="/tokens.css" />
         <link rel="stylesheet" href="/components.css" />
+        <link rel="stylesheet" href="/radix-compat.css" />
         <link rel="stylesheet" href="/motion.css" />
       </head>
       <body>

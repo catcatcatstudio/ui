@@ -1,0 +1,546 @@
+/*
+ * radix-compat.css
+ * Bridges catalog CSS (class-based state) → Radix UI (data-attribute state).
+ *
+ * The catalog CSS was designed for vanilla HTML/JS with manual class toggling.
+ * Radix uses data-state attributes and portals floating elements to <body>.
+ * This file overrides the conflicting catalog properties.
+ *
+ * Load order: tokens.css → components.css → radix-compat.css → motion.css
+ */
+
+
+/* ============================================
+   FLOATING ELEMENTS — Portalled by Radix
+   Radix portals popover/tooltip/dropdown/select to <body>.
+   It handles positioning via Floating UI (inline styles).
+   Catalog CSS sets opacity:0, pointer-events:none, position:absolute
+   and reveals via .open/.visible classes that Radix never adds.
+   Strip all of that. Keep visual properties only.
+   ============================================ */
+
+
+/* --- POPOVER --- */
+
+.popover[data-state] {
+  position: relative;
+  top: auto;
+  left: auto;
+  right: auto;
+  bottom: auto;
+  transform: none;
+  opacity: 1;
+  pointer-events: auto;
+  filter: none;
+  will-change: auto;
+  transition: none;
+}
+
+/* Kill the CSS arrow pseudo-elements — they depend on trigger-relative positioning */
+.popover[data-state]::before,
+.popover[data-state]::after {
+  display: none;
+}
+
+/* Hide Radix SVG arrow — catalog uses border-triangle arrows tied to trigger context */
+.popover .popover-radix-arrow,
+.popover [data-radix-popper-content-wrapper] svg {
+  display: none;
+}
+
+
+/* --- TOOLTIP --- */
+
+.tooltip[data-state] {
+  position: relative;
+  top: auto;
+  left: auto;
+  right: auto;
+  bottom: auto;
+  transform: none;
+  opacity: 1;
+  filter: none;
+  will-change: auto;
+  pointer-events: none;
+}
+
+/* Kill CSS arrow pseudo-element */
+.tooltip[data-state]::after {
+  display: none;
+}
+
+/* Style Radix SVG arrow to match catalog inverted style */
+.tooltip-arrow {
+  fill: var(--primary);
+}
+[data-theme="dark"] .tooltip-arrow {
+  fill: var(--text);
+}
+
+
+/* --- DROPDOWN MENU --- */
+
+.dropdown[data-state] {
+  position: relative;
+  top: auto;
+  left: auto;
+  right: auto;
+  bottom: auto;
+  transform: none;
+  opacity: 1;
+  pointer-events: auto;
+  will-change: auto;
+  transition: none;
+}
+
+/* Dropdown label — catalog uses .dropdown-group for the heading class */
+.dropdown-label {
+  padding: 8px 12px 4px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: var(--text-transform, uppercase);
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+}
+
+
+/* --- SELECT DROPDOWN --- */
+
+.select-dropdown[data-state] {
+  position: relative;
+  top: auto;
+  left: auto;
+  right: auto;
+  bottom: auto;
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+  animation: none;
+  transition: none;
+}
+
+
+/* ============================================
+   ACCORDION — [data-state] selectors
+   Catalog uses .accordion-item.open
+   Radix uses [data-state="open"] on the item
+   ============================================ */
+
+.accordion-item[data-state="open"] .accordion-chevron {
+  transform: rotate(180deg);
+}
+
+/* Override catalog grid animation — Radix manages content visibility
+   and motion.css provides height animation via --radix-accordion-content-height */
+.accordion-panel {
+  display: block !important;
+  grid-template-rows: none !important;
+  overflow: hidden;
+}
+
+
+/* ============================================
+   TABS — [data-state="active"] selectors
+   Catalog uses .tabs-trigger.active
+   Radix uses [data-state="active"]
+   ============================================ */
+
+.tabs-trigger[data-state="active"] {
+  color: var(--text);
+}
+
+.tabs-trigger[data-state="active"]::after {
+  transform: scaleX(1);
+}
+
+/* Pill variant active state */
+.tabs.pill .tabs-trigger[data-state="active"] {
+  background: var(--bg);
+  box-shadow: var(--shadow-knob);
+}
+
+[data-theme="dark"] .tabs.pill .tabs-trigger[data-state="active"] {
+  background: var(--surface-2);
+}
+
+/* Radix manages panel visibility via mount/unmount — override catalog display:none */
+.tabs-panel[data-state="active"] {
+  display: block;
+}
+
+.tabs-panel[data-state="inactive"] {
+  display: none;
+}
+
+
+/* ============================================
+   SELECT — [data-state] selectors
+   Catalog uses .select.open
+   Radix uses [data-state="open"] on the trigger
+   ============================================ */
+
+.select[data-state="open"] .select-chevron {
+  transform: rotate(180deg);
+}
+
+.select.bordered[data-state="open"] {
+  border-color: var(--text-dim);
+}
+
+.select.underline[data-state="open"] {
+  border-bottom-color: var(--text);
+}
+
+.select.ghost[data-state="open"] {
+  border-color: var(--text-dim);
+  background: var(--surface-2);
+}
+
+/* Selected option — Radix uses data-state="checked" on SelectItem */
+.select-option[data-state="checked"] {
+  color: var(--primary);
+}
+
+.select-option[data-state="checked"] .check {
+  opacity: 1;
+}
+
+/* Disabled option */
+.select-option[data-disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+
+/* ============================================
+   CHECKBOX — [data-state] selectors
+   Catalog uses input:checked + .checkbox-box
+   Radix uses [data-state="checked"] on the button
+   ============================================ */
+
+.checkbox-box[data-state="checked"],
+.checkbox-box[data-state="indeterminate"] {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.checkbox-box[data-state="checked"] svg,
+.checkbox-box[data-state="indeterminate"] svg {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Focus state via Radix */
+.checkbox-box:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+
+/* ============================================
+   SWITCH / TOGGLE — Radix structure adaptation
+
+   Catalog structure: .toggle > input + .toggle-track (::after = knob)
+   Radix structure:   .toggle > button.toggle-track[role="switch"] > span.toggle-knob
+
+   The ::after pseudo-element knob from catalog renders alongside
+   the real Radix Thumb. Hide the pseudo, style the real element.
+   ============================================ */
+
+/* Hide the catalog's pseudo-element knob on Radix switches */
+.toggle-track[role="switch"]::after {
+  display: none;
+}
+
+/* Make the Radix switch a proper positioned container */
+.toggle-track[role="switch"] {
+  position: relative;
+}
+
+/* Style the Radix Thumb to match catalog knob specs */
+.toggle-knob {
+  display: block;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  background: var(--text-dim);
+  box-shadow: var(--shadow-knob);
+  transition: transform var(--duration-base) var(--ease-spring),
+              background var(--duration-base) var(--ease);
+  pointer-events: none;
+}
+
+/* Checked state — slide right + invert colors */
+.toggle-track[data-state="checked"] {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.toggle-track[data-state="checked"] .toggle-knob {
+  transform: translateX(18px);
+  background: var(--bg);
+}
+
+/* Hover */
+.toggle:hover .toggle-track[role="switch"] {
+  border-color: var(--text-dim);
+}
+
+/* Focus */
+.toggle-track[role="switch"]:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Pill variant — round track and knob */
+.toggle-track[role="switch"].pill {
+  border-radius: 11px;
+}
+
+.toggle-track[role="switch"].pill .toggle-knob {
+  border-radius: 50%;
+}
+
+/* Size: sm */
+.toggle.sm .toggle-track[role="switch"],
+.toggle-track[role="switch"].sm {
+  width: 32px;
+  height: 18px;
+  border-radius: 3px;
+}
+
+.toggle.sm .toggle-knob,
+.toggle-track[role="switch"].sm .toggle-knob {
+  width: 10px;
+  height: 10px;
+  top: 3px;
+  left: 3px;
+}
+
+.toggle.sm .toggle-track[data-state="checked"] .toggle-knob,
+.toggle-track[role="switch"].sm[data-state="checked"] .toggle-knob {
+  transform: translateX(14px);
+}
+
+.toggle.sm.pill .toggle-track[role="switch"],
+.toggle-track[role="switch"].sm.pill {
+  border-radius: 9px;
+}
+
+/* Size: lg */
+.toggle.lg .toggle-track[role="switch"],
+.toggle-track[role="switch"].lg {
+  width: 48px;
+  height: 26px;
+  border-radius: 5px;
+}
+
+.toggle.lg .toggle-knob,
+.toggle-track[role="switch"].lg .toggle-knob {
+  width: 18px;
+  height: 18px;
+  top: 3px;
+  left: 3px;
+}
+
+.toggle.lg .toggle-track[data-state="checked"] .toggle-knob,
+.toggle-track[role="switch"].lg[data-state="checked"] .toggle-knob {
+  transform: translateX(22px);
+}
+
+.toggle.lg.pill .toggle-track[role="switch"],
+.toggle-track[role="switch"].lg.pill {
+  border-radius: 13px;
+}
+
+/* Disabled */
+.toggle-track[role="switch"]:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+
+/* ============================================
+   DIALOG / MODAL — Radix overlay + data-state
+   Catalog uses native <dialog> with ::backdrop and [open].
+   Radix uses a separate overlay div + data-state attributes.
+   motion.css already handles entrance/exit animations.
+   ============================================ */
+
+/* Radix overlay (catalog uses ::backdrop on native <dialog>) */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 499;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(2px);
+}
+
+/* Radix modal content needs fixed positioning + centering */
+.modal[data-state] {
+  position: fixed;
+  z-index: 500;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Override the catalog's dialog:not([open]) rule — Radix doesn't use [open] attribute */
+.modal:not([open]) {
+  display: flex;
+}
+
+/* Danger overlay */
+.modal.danger ~ .modal-overlay,
+.modal-overlay:has(~ .modal.danger) {
+  background: rgba(30, 0, 0, 0.45);
+  backdrop-filter: blur(3px);
+}
+
+
+/* ============================================
+   TOAST (Sonner) — Override Sonner defaults
+   Sonner manages its own positioning and stacking.
+   We override visual styling to match catalog toast.
+   ============================================ */
+
+/* Sonner toast wrapper — match catalog visual specs */
+[data-sonner-toaster] {
+  font-family: var(--font) !important;
+}
+
+[data-sonner-toast] {
+  font-family: var(--font) !important;
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-floating) !important;
+  color: var(--text) !important;
+  padding: 12px 16px !important;
+  gap: 10px !important;
+}
+
+/* Toast title */
+[data-sonner-toast] [data-title] {
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  text-transform: var(--text-transform, uppercase) !important;
+  letter-spacing: 0.04em !important;
+  color: var(--text) !important;
+}
+
+/* Toast description/message */
+[data-sonner-toast] [data-description] {
+  font-size: 11px !important;
+  font-weight: 400 !important;
+  text-transform: none !important;
+  line-height: 1.5 !important;
+  color: var(--text-dim) !important;
+}
+
+/* Toast close button */
+[data-sonner-toast] [data-close-button] {
+  color: var(--text-dim) !important;
+  opacity: 0 !important;
+  transition: opacity var(--duration-fast) var(--ease) !important;
+  background: none !important;
+  border: none !important;
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  left: auto !important;
+  top: auto !important;
+  transform: none !important;
+}
+
+[data-sonner-toast]:hover [data-close-button] {
+  opacity: 0.6 !important;
+}
+
+[data-sonner-toast] [data-close-button]:hover {
+  opacity: 1 !important;
+  background: none !important;
+}
+
+/* Toast icon */
+[data-sonner-toast] [data-icon] {
+  color: var(--text-dim) !important;
+  flex-shrink: 0 !important;
+  width: 16px !important;
+  height: 16px !important;
+  margin: 0 !important;
+}
+
+/* Intent: Success */
+[data-sonner-toast][data-type="success"] {
+  background: var(--feedback-success-bg) !important;
+  border-color: var(--feedback-success-border) !important;
+}
+
+[data-sonner-toast][data-type="success"] [data-icon] {
+  color: var(--feedback-success) !important;
+}
+
+/* Intent: Error */
+[data-sonner-toast][data-type="error"] {
+  background: var(--feedback-error-bg) !important;
+  border-color: var(--feedback-error-border) !important;
+}
+
+[data-sonner-toast][data-type="error"] [data-icon] {
+  color: var(--feedback-error) !important;
+}
+
+/* Intent: Warning */
+[data-sonner-toast][data-type="warning"] {
+  background: var(--feedback-warn-bg) !important;
+  border-color: var(--feedback-warn-border) !important;
+}
+
+[data-sonner-toast][data-type="warning"] [data-icon] {
+  color: var(--feedback-warn) !important;
+}
+
+/* Dark mode toast intents */
+[data-theme="dark"] [data-sonner-toast][data-type="success"] {
+  background: rgba(102, 187, 106, 0.1) !important;
+  border-color: rgba(102, 187, 106, 0.2) !important;
+}
+
+[data-theme="dark"] [data-sonner-toast][data-type="error"] {
+  background: rgba(239, 83, 80, 0.1) !important;
+  border-color: rgba(239, 83, 80, 0.2) !important;
+}
+
+[data-theme="dark"] [data-sonner-toast][data-type="warning"] {
+  background: rgba(230, 160, 0, 0.1) !important;
+  border-color: rgba(230, 160, 0, 0.2) !important;
+}
+
+/* Toast action button */
+[data-sonner-toast] [data-button] {
+  display: inline-flex !important;
+  align-items: center !important;
+  background: none !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+  padding: 0 8px !important;
+  height: 24px !important;
+  font-family: var(--font) !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  text-transform: var(--text-transform, uppercase) !important;
+  letter-spacing: var(--letter-spacing) !important;
+  color: var(--text) !important;
+  cursor: pointer !important;
+}
+
+[data-sonner-toast] [data-button]:hover {
+  border-color: var(--text-dim) !important;
+  background: var(--tint) !important;
+}

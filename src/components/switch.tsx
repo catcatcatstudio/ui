@@ -18,8 +18,7 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
         className={cn(
           "toggle-track",
           pill && "pill",
-          size === "sm" && "sm",
-          size === "lg" && "lg",
+          size !== "md" && size,
           className
         )}
         {...props}
@@ -30,7 +29,11 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
 
     if (label) {
       return (
-        <label className={cn("toggle", size === "sm" && "sm", size === "lg" && "lg")}>
+        <label className={cn(
+          "toggle",
+          size !== "md" && size,
+          props.disabled && "disabled"
+        )}>
           {switchEl}
           {label}
         </label>

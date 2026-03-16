@@ -6,8 +6,11 @@
 /* 1. Tokens — CSS custom properties for colors, spacing, motion, elevation */
 @import "./tokens.css";
 
-/* 2. Components — all 50 component styles (in @layer components for Tailwind compatibility) */
+/* 2. Components — all 50 component styles */
 @import "./components.css";
 
-/* 3. Motion — Radix data-attribute animation overrides */
+/* 3. Radix compat — bridges catalog CSS class selectors to Radix data-state attributes */
+@import "./radix-compat.css";
+
+/* 4. Motion — Radix data-attribute animation overrides */
 @import "./motion.css";

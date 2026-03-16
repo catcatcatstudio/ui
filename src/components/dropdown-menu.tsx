@@ -43,7 +43,7 @@ export const DropdownMenuLabel = forwardRef<HTMLDivElement, RadixDropdownMenu.Dr
   ({ className, ...props }, ref) => (
     <RadixDropdownMenu.Label
       ref={ref}
-      className={cn("dropdown-label", className)}
+      className={cn("dropdown-group", className)}
       {...props}
     />
   )
@@ -68,5 +68,5 @@ DropdownMenuGroup.displayName = "DropdownMenuGroup"
 
 // Shortcut text (right-aligned in item)
 export function DropdownMenuShortcut({ className, ...props }: React.HTMLAttributes<HTMLElement>) {
-  return <kbd className={cn(className)} {...props} />
+  return <kbd className={cn("dropdown-shortcut", className)} style={{ marginLeft: "auto", color: "var(--text-dim)", fontWeight: 400 }} {...props} />
 }
